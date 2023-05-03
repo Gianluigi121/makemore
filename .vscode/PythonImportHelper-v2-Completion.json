@@ -1,0 +1,461 @@
+[
+    {
+        "label": "torch",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch",
+        "description": "torch",
+        "detail": "torch",
+        "documentation": {}
+    },
+    {
+        "label": "torch.nn.functional",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch.nn.functional",
+        "description": "torch.nn.functional",
+        "detail": "torch.nn.functional",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "words",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "words = open('names.txt', 'r').read().split()\n# Create the reference dictionary\nchs = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\n# Create a dataset\nxs = []\nys = []\nfor word in words:",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "chs",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "chs = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\n# Create a dataset\nxs = []\nys = []\nfor word in words:\n    chs = '.' + word + '.'\n    for ch1, ch2 in zip(chs, chs[1:]):",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "stoi",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "stoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\n# Create a dataset\nxs = []\nys = []\nfor word in words:\n    chs = '.' + word + '.'\n    for ch1, ch2 in zip(chs, chs[1:]):\n        idx1 = stoi[ch1]",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "stoi['.']",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "stoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\n# Create a dataset\nxs = []\nys = []\nfor word in words:\n    chs = '.' + word + '.'\n    for ch1, ch2 in zip(chs, chs[1:]):\n        idx1 = stoi[ch1]\n        idx2 = stoi[ch2]",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "itos",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "itos = {i:s for s, i in stoi.items()}\n# Create a dataset\nxs = []\nys = []\nfor word in words:\n    chs = '.' + word + '.'\n    for ch1, ch2 in zip(chs, chs[1:]):\n        idx1 = stoi[ch1]\n        idx2 = stoi[ch2]\n        xs.append(idx1)",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "xs",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "xs = []\nys = []\nfor word in words:\n    chs = '.' + word + '.'\n    for ch1, ch2 in zip(chs, chs[1:]):\n        idx1 = stoi[ch1]\n        idx2 = stoi[ch2]\n        xs.append(idx1)\n        ys.append(idx2)\nx = torch.tensor(xs)",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "ys",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "ys = []\nfor word in words:\n    chs = '.' + word + '.'\n    for ch1, ch2 in zip(chs, chs[1:]):\n        idx1 = stoi[ch1]\n        idx2 = stoi[ch2]\n        xs.append(idx1)\n        ys.append(idx2)\nx = torch.tensor(xs)\ny = torch.tensor(ys)",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "x",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "x = torch.tensor(xs)\ny = torch.tensor(ys)\n# Initialize the weights\ng = torch.Generator().manual_seed(0)     \nw = torch.randn((27, 27), generator=g, requires_grad=True)\n# Training loop\nepoch = 200\nnum_samples = len(xs)\nstep_size = 50\nfor i in range(epoch):",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "y",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "y = torch.tensor(ys)\n# Initialize the weights\ng = torch.Generator().manual_seed(0)     \nw = torch.randn((27, 27), generator=g, requires_grad=True)\n# Training loop\nepoch = 200\nnum_samples = len(xs)\nstep_size = 50\nfor i in range(epoch):\n    # Forward pass",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "g",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "g = torch.Generator().manual_seed(0)     \nw = torch.randn((27, 27), generator=g, requires_grad=True)\n# Training loop\nepoch = 200\nnum_samples = len(xs)\nstep_size = 50\nfor i in range(epoch):\n    # Forward pass\n    x_enc = F.one_hot(x, num_classes=27).float()\n    logits = x_enc @ w",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "w",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "w = torch.randn((27, 27), generator=g, requires_grad=True)\n# Training loop\nepoch = 200\nnum_samples = len(xs)\nstep_size = 50\nfor i in range(epoch):\n    # Forward pass\n    x_enc = F.one_hot(x, num_classes=27).float()\n    logits = x_enc @ w\n    counts = torch.exp(logits)",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "epoch",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "epoch = 200\nnum_samples = len(xs)\nstep_size = 50\nfor i in range(epoch):\n    # Forward pass\n    x_enc = F.one_hot(x, num_classes=27).float()\n    logits = x_enc @ w\n    counts = torch.exp(logits)\n    P = counts / counts.sum(dim=1, keepdims=True)\n    loss = -P[torch.arange(num_samples), ys].log().mean()",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "num_samples",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "num_samples = len(xs)\nstep_size = 50\nfor i in range(epoch):\n    # Forward pass\n    x_enc = F.one_hot(x, num_classes=27).float()\n    logits = x_enc @ w\n    counts = torch.exp(logits)\n    P = counts / counts.sum(dim=1, keepdims=True)\n    loss = -P[torch.arange(num_samples), ys].log().mean()\n    # Backward pass",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "step_size",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "step_size = 50\nfor i in range(epoch):\n    # Forward pass\n    x_enc = F.one_hot(x, num_classes=27).float()\n    logits = x_enc @ w\n    counts = torch.exp(logits)\n    P = counts / counts.sum(dim=1, keepdims=True)\n    loss = -P[torch.arange(num_samples), ys].log().mean()\n    # Backward pass\n    w.grad = None",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "word_num",
+        "kind": 5,
+        "importPath": "NN",
+        "description": "NN",
+        "peekOfCode": "word_num = 5\nfor i in range(word_num):\n    idx = 0\n    out = []\n    while True:\n        x_enc = F.one_hot(torch.tensor(idx), num_classes = 27).float()\n        logits = x_enc @ w\n        counts = logits.exp()\n        p = counts / counts.sum()\n        idx = torch.multinomial(p, num_samples=1, generator=g).item()",
+        "detail": "NN",
+        "documentation": {}
+    },
+    {
+        "label": "words",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "words = open('names.txt', 'r').read().split()\n# Step 1: Build a bigram dictionary\n# key: Bigram tuple, value: Number of appearence that they occur together\nb = {}\nfor word in words:\n    word = '.' + word + '.'\n    for ch1, ch2 in zip(word, word[1:]):\n        bigram = (ch1, ch2)\n        b[bigram] = b.get(bigram, 0)+1\n# Step 2: Create reference dictionaries",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "b",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "b = {}\nfor word in words:\n    word = '.' + word + '.'\n    for ch1, ch2 in zip(word, word[1:]):\n        bigram = (ch1, ch2)\n        b[bigram] = b.get(bigram, 0)+1\n# Step 2: Create reference dictionaries\n# Create a dictionary map from chars to integers\nchars = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chars)}",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "chars",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "chars = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chars)}\nstoi['.'] = 0\n# Create a dictionary map from integers to chars\nitos = {i:s for s, i in stoi.items()}\n# Step 3: Create a torch tensor where each entry represent the number of occurrence\nN = torch.zeros((27, 27))\nfor bigram, count in b.items():\n    ch1, ch2 = bigram\n    id1 = stoi[ch1]",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "stoi",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "stoi = {s:i+1 for i, s in enumerate(chars)}\nstoi['.'] = 0\n# Create a dictionary map from integers to chars\nitos = {i:s for s, i in stoi.items()}\n# Step 3: Create a torch tensor where each entry represent the number of occurrence\nN = torch.zeros((27, 27))\nfor bigram, count in b.items():\n    ch1, ch2 = bigram\n    id1 = stoi[ch1]\n    id2 = stoi[ch2]",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "stoi['.']",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "stoi['.'] = 0\n# Create a dictionary map from integers to chars\nitos = {i:s for s, i in stoi.items()}\n# Step 3: Create a torch tensor where each entry represent the number of occurrence\nN = torch.zeros((27, 27))\nfor bigram, count in b.items():\n    ch1, ch2 = bigram\n    id1 = stoi[ch1]\n    id2 = stoi[ch2]\n    N[id1][id2] += count",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "itos",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "itos = {i:s for s, i in stoi.items()}\n# Step 3: Create a torch tensor where each entry represent the number of occurrence\nN = torch.zeros((27, 27))\nfor bigram, count in b.items():\n    ch1, ch2 = bigram\n    id1 = stoi[ch1]\n    id2 = stoi[ch2]\n    N[id1][id2] += count\n# Step 4: Show the figure of the matrix\n# plt.figure(figsize=(16,16))",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "N",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "N = torch.zeros((27, 27))\nfor bigram, count in b.items():\n    ch1, ch2 = bigram\n    id1 = stoi[ch1]\n    id2 = stoi[ch2]\n    N[id1][id2] += count\n# Step 4: Show the figure of the matrix\n# plt.figure(figsize=(16,16))\n# plt.imshow(N, cmap='Blues')\n# for i in range(27):",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "P",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "P = N / torch.sum(N, dim=1, keepdims=True)\nprint(P[0].sum())\n# Step 6: Inference: Use the bigram matrix, start with . and end when we see another .\ng = torch.Generator().manual_seed(0)\nword_num = 5\nfor i in range(word_num):\n    idx = 0\n    out = []\n    while True:\n        p = P[idx] # prob of the next char given the current one",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "g",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "g = torch.Generator().manual_seed(0)\nword_num = 5\nfor i in range(word_num):\n    idx = 0\n    out = []\n    while True:\n        p = P[idx] # prob of the next char given the current one\n        idx = torch.multinomial(p, num_samples=1, replacement=True, generator=g).item()\n        if idx == 0:\n            break",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "word_num",
+        "kind": 5,
+        "importPath": "bigram",
+        "description": "bigram",
+        "peekOfCode": "word_num = 5\nfor i in range(word_num):\n    idx = 0\n    out = []\n    while True:\n        p = P[idx] # prob of the next char given the current one\n        idx = torch.multinomial(p, num_samples=1, replacement=True, generator=g).item()\n        if idx == 0:\n            break\n        out.append(itos[idx])",
+        "detail": "bigram",
+        "documentation": {}
+    },
+    {
+        "label": "Linear",
+        "kind": 6,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "class Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out, generator=g) / fan_in ** 0.5 # Multiply a value to reduce the variance increasement due to the matrix multiplication\n        self.bias = torch.zeros(fan_out, generator=g) if bias else None\n    def __call__(self, x):\n        self.out = x @ self.weight\n        if self.bias is not None:\n            self.out += self.bias\n        return self.out\n    def parameters(self):",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "BatchNorm1D",
+        "kind": 6,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "class BatchNorm1D:\n    def __init__(self, dim, eps=1e-5, momentum=0.01):\n        self.eps = eps\n        self.momentum = momentum\n        self.training = True # Set to the training mode by default\n        # Init parameters\n        self.gamma = torch.ones(dim)\n        self.beta = torch.zeros(dim) \n        # Init running updates\n        self.running_mean = torch.zeros(dim) ",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "Tanh",
+        "kind": 6,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "class Tanh:\n    def __call__(self, x):\n        self.out = torch.tanh(x)\n        return self.out\n    def parameters(self):\n        return []\n# Step 4: Define Custom Model & Init\nemb_size = 10\nblock_size = 3\nn_hidden= 100",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "build_dataset",
+        "kind": 2,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "def build_dataset(words):\n    xs, ys = [], []\n    for word in words:\n        word = word + '.'\n        context = [0]*3\n        for ch in word:\n            xs.append(context)\n            idx = stoi[ch]\n            ys.append(idx)\n            context = context[1:] + [idx]",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "compute_loss",
+        "kind": 2,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "def compute_loss(split):\n    X, Y = {\n        'train': (Xtr, Ytr), \n        'val': (Xdev, Ydev),\n        'test': (Xtest, Ytest)\n    }[split]\n    # Embedding\n    emb = C[X]\n    x = emb.view(-1, block_size*emb_size)\n    for layer in layers:",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "words",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "words = open('names.txt', 'r').read().split()\nchs = sorted(list(set(''.join(words))))\n# Step 1: Build a reference map\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\n# Step 2: Build dataset\ndef build_dataset(words):\n    xs, ys = [], []\n    for word in words:",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "chs",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "chs = sorted(list(set(''.join(words))))\n# Step 1: Build a reference map\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\n# Step 2: Build dataset\ndef build_dataset(words):\n    xs, ys = [], []\n    for word in words:\n        word = word + '.'",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "stoi",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "stoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\n# Step 2: Build dataset\ndef build_dataset(words):\n    xs, ys = [], []\n    for word in words:\n        word = word + '.'\n        context = [0]*3\n        for ch in word:",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "stoi['.']",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "stoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\n# Step 2: Build dataset\ndef build_dataset(words):\n    xs, ys = [], []\n    for word in words:\n        word = word + '.'\n        context = [0]*3\n        for ch in word:\n            xs.append(context)",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "itos",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "itos = {i:s for s, i in stoi.items()}\n# Step 2: Build dataset\ndef build_dataset(words):\n    xs, ys = [], []\n    for word in words:\n        word = word + '.'\n        context = [0]*3\n        for ch in word:\n            xs.append(context)\n            idx = stoi[ch]",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "num1",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "num1 = int(len(words)*0.8)\nnum2 = int(len(words)*0.9)\nXtr, Ytr = build_dataset(words[:num1])\nXdev, Ydev = build_dataset(words[num1:num2])\nXtest, Ytest = build_dataset(words[num2:])\ng = torch.Generator().manual_seed(2147483647) # Modify this part later\n# Step 3: Define layer model\nclass Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out, generator=g) / fan_in ** 0.5 # Multiply a value to reduce the variance increasement due to the matrix multiplication",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "num2",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "num2 = int(len(words)*0.9)\nXtr, Ytr = build_dataset(words[:num1])\nXdev, Ydev = build_dataset(words[num1:num2])\nXtest, Ytest = build_dataset(words[num2:])\ng = torch.Generator().manual_seed(2147483647) # Modify this part later\n# Step 3: Define layer model\nclass Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out, generator=g) / fan_in ** 0.5 # Multiply a value to reduce the variance increasement due to the matrix multiplication\n        self.bias = torch.zeros(fan_out, generator=g) if bias else None",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "g",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "g = torch.Generator().manual_seed(2147483647) # Modify this part later\n# Step 3: Define layer model\nclass Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out, generator=g) / fan_in ** 0.5 # Multiply a value to reduce the variance increasement due to the matrix multiplication\n        self.bias = torch.zeros(fan_out, generator=g) if bias else None\n    def __call__(self, x):\n        self.out = x @ self.weight\n        if self.bias is not None:\n            self.out += self.bias",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "emb_size",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "emb_size = 10\nblock_size = 3\nn_hidden= 100\nvocab_size = 27\nC = torch.randn(27, emb_size, generator=g)\nlayers = [Linear(block_size*emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "block_size",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "block_size = 3\nn_hidden= 100\nvocab_size = 27\nC = torch.randn(27, emb_size, generator=g)\nlayers = [Linear(block_size*emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, vocab_size, bias=False), BatchNorm1D(vocab_size)]",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "vocab_size",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "vocab_size = 27\nC = torch.randn(27, emb_size, generator=g)\nlayers = [Linear(block_size*emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, vocab_size, bias=False), BatchNorm1D(vocab_size)]\nwith torch.no_grad():\n    layers[-1].gamma *= 0.1 # Init self.gamma to be small values as the final logits = self.gamma * x + self.bias",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "C",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "C = torch.randn(27, emb_size, generator=g)\nlayers = [Linear(block_size*emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, vocab_size, bias=False), BatchNorm1D(vocab_size)]\nwith torch.no_grad():\n    layers[-1].gamma *= 0.1 # Init self.gamma to be small values as the final logits = self.gamma * x + self.bias\n                            # Previously we have init self.bias = 0. ",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "layers",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "layers = [Linear(block_size*emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, vocab_size, bias=False), BatchNorm1D(vocab_size)]\nwith torch.no_grad():\n    layers[-1].gamma *= 0.1 # Init self.gamma to be small values as the final logits = self.gamma * x + self.bias\n                            # Previously we have init self.bias = 0. \n    for layer in layers[:-1]:",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "max_steps",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "max_steps = 200000\nbatch_size = 32\nlossi = []\nfor i in range(max_steps):\n    # Step 1: Select Mini-batch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size, ), generator=g)\n    Xb, Yb = Xtr[idx], Ytr[idx]\n    # Step 2: Forward network\n    # Embedding\n    emb = C[Xb] # (num_samples, block_size, emb_size)",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "batch_size",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "batch_size = 32\nlossi = []\nfor i in range(max_steps):\n    # Step 1: Select Mini-batch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size, ), generator=g)\n    Xb, Yb = Xtr[idx], Ytr[idx]\n    # Step 2: Forward network\n    # Embedding\n    emb = C[Xb] # (num_samples, block_size, emb_size)\n    x = emb.view(-1, block_size*emb_size)",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "lossi",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "lossi = []\nfor i in range(max_steps):\n    # Step 1: Select Mini-batch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size, ), generator=g)\n    Xb, Yb = Xtr[idx], Ytr[idx]\n    # Step 2: Forward network\n    # Embedding\n    emb = C[Xb] # (num_samples, block_size, emb_size)\n    x = emb.view(-1, block_size*emb_size)\n    # Go through the model",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "word_num",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "word_num = 20\nfor i in range(word_num):\n    out = []\n    context = [0] * block_size\n    while True:\n        emb = C[torch.tensor(context)] # (block_size, emb_size)\n        x = emb.view(block_size*emb_size)\n        for layer in layers:\n            x = layer(x)\n        prob = F.softmax(x, dim=1)",
+        "detail": "part3",
+        "documentation": {}
+    }
+]
