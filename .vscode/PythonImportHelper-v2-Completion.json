@@ -27,6 +27,15 @@
         "documentation": {}
     },
     {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
         "label": "words",
         "kind": 5,
         "importPath": "NN",
@@ -254,244 +263,496 @@
     {
         "label": "Linear",
         "kind": 6,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "class Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out) / (fan_in ** 0.5)\n        self.bias = torch.zeros(fan_out) if bias else None\n    def __call__(self, x):\n        self.out = x @ self.weight\n        if self.bias is not None:\n            self.out += self.bias\n        return self.out\n    def parameters(self):",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "class Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out, generator=g) / fan_in**0.5\n        self.bias = torch.zeros(fan_out, generator=g) if bias else None\n    def __call__(self, x):\n        self.out = x @ self.weight\n        if self.bias is not None:\n            self.out += self.bias\n        return self.out\n    def parameters(self):",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "BatchNorm1D",
         "kind": 6,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "class BatchNorm1D:\n    def __init__(self, dim, eps=1e-5, momentum=0.01):\n        self.eps = eps\n        self.momentum = momentum\n        self.training = True\n        # Init params\n        self.gamma = torch.ones(dim)\n        self.beta = torch.zeros(dim)\n        # Init running updates\n        self.running_mean = torch.zeros(dim)",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "class BatchNorm1D:\n    def __init__(self, dim, eps=1e-5, momentum=0.01):\n        self.eps = eps\n        self.momentum = momentum\n        self.training = True\n        # Parameters(trained with backprop)\n        self.gamma = torch.ones(dim)\n        self.beta = torch.zeros(dim)\n        # buffers(trained with a running 'momentum update')\n        self.running_mean = torch.zeros(dim)",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "Tanh",
         "kind": 6,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "class Tanh:\n    def __call__(self, x):\n        self.out = torch.tanh(x)\n        return self.out\n    def parameters(self):\n        return []\nclass Embedding:\n    def __init__(self, vocab_size, emb_size):\n        self.weight = torch.randn(vocab_size, emb_size)\n    def __call__(self, x):",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "Embedding",
-        "kind": 6,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "class Embedding:\n    def __init__(self, vocab_size, emb_size):\n        self.weight = torch.randn(vocab_size, emb_size)\n    def __call__(self, x):\n        # X: (batch_size, block_size) self.out: (batch_size, block_size, emb_size)\n        self.out = self.weight[x] \n        return self.out\n    def parameters(self):\n        return [self.weight]\nclass Flatten:",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "Flatten",
-        "kind": 6,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "class Flatten:\n    def __init__(self, group_size):\n        self.group_size = group_size\n    def __call__(self, x):\n        batch_size, block_size, emb_size = x.shape\n        self.out = x.view(batch_size, block_size // self.group_size, self.group_size * emb_size)\n        if self.out.shape[1] == 1:\n            self.out = self.out.squeeze(dim=1)\n        return self.out\n    def parameters(self):",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "Sequential",
-        "kind": 6,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "class Sequential:\n    # Layers: A list of layers\n    def __init__(self, layers):\n        self.layers = layers\n    def __call__(self, x):\n        for layer in self.layers:\n            x = layer(x)\n        self.out = x\n        return self.out\n    def parameters(self):",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "class Tanh:\n    def __call__(self, x):\n        return torch.tanh(x)\n    def parameters(self):\n        return []\n# Initialization\ng = torch.Generator().manual_seed(2147483647)\nn_emb = 10 # Size the representation vector for each character\nn_hidden = 100 # Number of neurons in the hidden layer\nvocab_size = 27",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "build_dataset",
         "kind": 2,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "def build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'\n        context = [0]*block_size\n        for ch in word:\n            xs.append(context)\n            idx = stoi[ch]\n            ys.append(idx)",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "def build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        context = [0] * block_size\n        word = word + '.'\n        for ch in word:\n            xs.append(context)\n            idx = stoi[ch]\n            ys.append(idx)",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "split_loss",
         "kind": 2,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "def split_loss(split):\n    X, Y = {\n        'train': (Xtr, Ytr), \n        'val': (Xval, Yval),\n        'test': (Xtest, Ytest)\n    }[split]\n    logits = model(X)\n    loss = F.cross_entropy(logits, Y)\n    print(f\"{split} loss: {loss.item()}\")\nsplit_loss('train')",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "def split_loss(split):\n    X, Y = {\n        'train': (Xtr, Ytr),\n        'val': (Xdev, Ydev), \n        'test': (Xtest, Ytest)\n    }[split]\n    emb = C[X] # (num_samples, block_size, emb_size)\n    x = emb.view(-1, block_size*n_emb)\n    # Go through the model\n    for layer in layers:",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "words",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "words = open('names.txt', 'r').read().split()\nprint(\"read_file\")\n# Build a reference map\nchs = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "words = open('names.txt', 'r').read().splitlines()\n# Build the vocabulary of characters and mapping to/from integers\nchs = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nvocab_size = len(stoi)\nitos = {i:s for s, i in stoi.items()}\n# Build the dataseet: Training, validation, and test\nblock_size = 3\ndef build_dataset(words):",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "chs",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "chs = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "chs = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nvocab_size = len(stoi)\nitos = {i:s for s, i in stoi.items()}\n# Build the dataseet: Training, validation, and test\nblock_size = 3\ndef build_dataset(words):\n    xs = []\n    ys = []",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "stoi",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "stoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "stoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nvocab_size = len(stoi)\nitos = {i:s for s, i in stoi.items()}\n# Build the dataseet: Training, validation, and test\nblock_size = 3\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "stoi['.']",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "stoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'\n        context = [0]*block_size",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "itos",
-        "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "itos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'\n        context = [0]*block_size\n        for ch in word:",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "block_size",
-        "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "block_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'\n        context = [0]*block_size\n        for ch in word:\n            xs.append(context)",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "num1",
-        "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "num1 = int(len(words)*0.8)\nnum2 = int(len(words)*0.9)\nXtr, Ytr = build_dataset(words[:num1])\nXval, Yval = build_dataset(words[num1:num2])\nXtest, Ytest = build_dataset(words[num2:])\n# Define Model layers\nclass Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out) / (fan_in ** 0.5)\n        self.bias = torch.zeros(fan_out) if bias else None",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "num2",
-        "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "num2 = int(len(words)*0.9)\nXtr, Ytr = build_dataset(words[:num1])\nXval, Yval = build_dataset(words[num1:num2])\nXtest, Ytest = build_dataset(words[num2:])\n# Define Model layers\nclass Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out) / (fan_in ** 0.5)\n        self.bias = torch.zeros(fan_out) if bias else None\n    def __call__(self, x):",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "batch_size",
-        "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "batch_size = 32\nblock_size = 8\nemb_size = 10\nn_hidden = 100\nvocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "block_size",
-        "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "block_size = 8\nemb_size = 10\nn_hidden = 100\nvocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "emb_size",
-        "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "emb_size = 10\nn_hidden = 100\nvocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)",
-        "detail": "part5(Wavenet)",
-        "documentation": {}
-    },
-    {
-        "label": "n_hidden",
-        "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "n_hidden = 100\nvocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)\n    Flatten(2),  # (32, 200)",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "stoi['.'] = 0\nvocab_size = len(stoi)\nitos = {i:s for s, i in stoi.items()}\n# Build the dataseet: Training, validation, and test\nblock_size = 3\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        context = [0] * block_size",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "vocab_size",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "vocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)\n    Flatten(2),  # (32, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 100)",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "vocab_size = len(stoi)\nitos = {i:s for s, i in stoi.items()}\n# Build the dataseet: Training, validation, and test\nblock_size = 3\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        context = [0] * block_size\n        word = word + '.'",
+        "detail": "part3",
         "documentation": {}
     },
     {
-        "label": "group_size",
+        "label": "itos",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "group_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)\n    Flatten(2),  # (32, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 100)\n    Linear(n_hidden, vocab_size), BatchNorm1D(vocab_size)   # (32, 27)",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "itos = {i:s for s, i in stoi.items()}\n# Build the dataseet: Training, validation, and test\nblock_size = 3\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        context = [0] * block_size\n        word = word + '.'\n        for ch in word:",
+        "detail": "part3",
         "documentation": {}
     },
     {
-        "label": "model",
+        "label": "block_size",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "model = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)\n    Flatten(2),  # (32, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 100)\n    Linear(n_hidden, vocab_size), BatchNorm1D(vocab_size)   # (32, 27)\n])",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "block_size = 3\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        context = [0] * block_size\n        word = word + '.'\n        for ch in word:\n            xs.append(context)\n            idx = stoi[ch]",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "num_samples",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "num_samples = len(words)\nimport random\nrandom.seed(42)\nrandom.shuffle(words)\nnum1 = int(num_samples*0.8)\nnum2 = int(num_samples*0.9)\nXtr, Ytr = build_dataset(words[:num1])          # Training: 80%\nXdev, Ydev = build_dataset(words[num1:num2])    # Val: 10%\nXtest, Ytest = build_dataset(words[num2:])      # Test: 10%\nprint(Xtr.shape, Ytr.shape)",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "num1",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "num1 = int(num_samples*0.8)\nnum2 = int(num_samples*0.9)\nXtr, Ytr = build_dataset(words[:num1])          # Training: 80%\nXdev, Ydev = build_dataset(words[num1:num2])    # Val: 10%\nXtest, Ytest = build_dataset(words[num2:])      # Test: 10%\nprint(Xtr.shape, Ytr.shape)\nprint(Xdev.shape, Ydev.shape)\nprint(Xtest.shape, Ytest.shape)\ng = torch.Generator().manual_seed(2147483647)\nclass Linear:",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "num2",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "num2 = int(num_samples*0.9)\nXtr, Ytr = build_dataset(words[:num1])          # Training: 80%\nXdev, Ydev = build_dataset(words[num1:num2])    # Val: 10%\nXtest, Ytest = build_dataset(words[num2:])      # Test: 10%\nprint(Xtr.shape, Ytr.shape)\nprint(Xdev.shape, Ydev.shape)\nprint(Xtest.shape, Ytest.shape)\ng = torch.Generator().manual_seed(2147483647)\nclass Linear:\n    def __init__(self, fan_in, fan_out, bias=True):",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "g",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "g = torch.Generator().manual_seed(2147483647)\nclass Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out, generator=g) / fan_in**0.5\n        self.bias = torch.zeros(fan_out, generator=g) if bias else None\n    def __call__(self, x):\n        self.out = x @ self.weight\n        if self.bias is not None:\n            self.out += self.bias\n        return self.out",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "g",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "g = torch.Generator().manual_seed(2147483647)\nn_emb = 10 # Size the representation vector for each character\nn_hidden = 100 # Number of neurons in the hidden layer\nvocab_size = 27\nC = torch.randn(vocab_size, n_emb)\n# Define the model\nlayers = [Linear(block_size*n_emb, n_hidden, False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "n_emb",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "n_emb = 10 # Size the representation vector for each character\nn_hidden = 100 # Number of neurons in the hidden layer\nvocab_size = 27\nC = torch.randn(vocab_size, n_emb)\n# Define the model\nlayers = [Linear(block_size*n_emb, n_hidden, False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "n_hidden",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "n_hidden = 100 # Number of neurons in the hidden layer\nvocab_size = 27\nC = torch.randn(vocab_size, n_emb)\n# Define the model\nlayers = [Linear(block_size*n_emb, n_hidden, False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, vocab_size, bias=False), BatchNorm1D(vocab_size)",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "vocab_size",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "vocab_size = 27\nC = torch.randn(vocab_size, n_emb)\n# Define the model\nlayers = [Linear(block_size*n_emb, n_hidden, False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, vocab_size, bias=False), BatchNorm1D(vocab_size)\n         ]",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "C",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "C = torch.randn(vocab_size, n_emb)\n# Define the model\nlayers = [Linear(block_size*n_emb, n_hidden, False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, vocab_size, bias=False), BatchNorm1D(vocab_size)\n         ]\n# Init the weights",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "layers",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "layers = [Linear(block_size*n_emb, n_hidden, False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),\n          Linear(n_hidden, vocab_size, bias=False), BatchNorm1D(vocab_size)\n         ]\n# Init the weights\nwith torch.no_grad():\n    layers[-1].gamma *= 0.1",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "parameters",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "parameters = model.parameters()\n# Set the gradient for all params to be true\nfor p in parameters:\n    p.requires_grad = True\n# Training\nepoch_num = 200000\nlossi = []\nfor i in range(epoch_num):\n    # Select a mini batch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size, ))",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "parameters = [C] + [p for layer in layers for p in layer.parameters()]\nprint(sum(p.nelement() for p in parameters))\nfor p in parameters:\n    p.requires_grad = True\nmax_steps = 200000\nbatch_size = 32\nlossi = []\nfor i in range(max_steps):\n    # Select Minibatch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size,), generator=g)",
+        "detail": "part3",
         "documentation": {}
     },
     {
-        "label": "epoch_num",
+        "label": "max_steps",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
-        "peekOfCode": "epoch_num = 200000\nlossi = []\nfor i in range(epoch_num):\n    # Select a mini batch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size, ))\n    Xb, Yb = Xtr[idx], Ytr[idx]\n    # Forward pass\n    logits = model(Xb)\n    loss = F.cross_entropy(logits, Yb)\n    lossi.append(loss.log10().item())",
-        "detail": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "max_steps = 200000\nbatch_size = 32\nlossi = []\nfor i in range(max_steps):\n    # Select Minibatch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size,), generator=g)\n    Xb = Xtr[idx]\n    Yb = Ytr[idx]\n    # Forward pass\n    # Embedding",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "batch_size",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "batch_size = 32\nlossi = []\nfor i in range(max_steps):\n    # Select Minibatch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size,), generator=g)\n    Xb = Xtr[idx]\n    Yb = Ytr[idx]\n    # Forward pass\n    # Embedding\n    emb = C[Xb] # (num_samples, block_size, emb_size)",
+        "detail": "part3",
         "documentation": {}
     },
     {
         "label": "lossi",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "lossi = []\nfor i in range(max_steps):\n    # Select Minibatch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size,), generator=g)\n    Xb = Xtr[idx]\n    Yb = Ytr[idx]\n    # Forward pass\n    # Embedding\n    emb = C[Xb] # (num_samples, block_size, emb_size)\n    x = emb.view(-1, block_size*n_emb)",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "g",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "g = torch.Generator().manual_seed(2147483647 + 10)\nwords_num = 20\nfor i in range(words_num):\n    context = [0]*3\n    out = []\n    while True:\n        emb = C[torch.tensor(context)] # (3, emb_size)\n        x = emb.reshape(1, block_size*n_emb)\n        for layer in layers:\n            x = layer(x)",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "words_num",
+        "kind": 5,
+        "importPath": "part3",
+        "description": "part3",
+        "peekOfCode": "words_num = 20\nfor i in range(words_num):\n    context = [0]*3\n    out = []\n    while True:\n        emb = C[torch.tensor(context)] # (3, emb_size)\n        x = emb.reshape(1, block_size*n_emb)\n        for layer in layers:\n            x = layer(x)\n        prob = F.softmax(x, dim=1)",
+        "detail": "part3",
+        "documentation": {}
+    },
+    {
+        "label": "Linear",
+        "kind": 6,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "class Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out) / (fan_in ** 0.5)\n        self.bias = torch.zeros(fan_out) if bias else None\n    def __call__(self, x):\n        self.out = x @ self.weight\n        if self.bias is not None:\n            self.out += self.bias\n        return self.out\n    def parameters(self):",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "BatchNorm1D",
+        "kind": 6,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "class BatchNorm1D:\n    def __init__(self, dim, eps=1e-5, momentum=0.01):\n        self.eps = eps\n        self.momentum = momentum\n        self.training = True\n        # Init params\n        self.gamma = torch.ones(dim)\n        self.beta = torch.zeros(dim)\n        # Init running updates\n        self.running_mean = torch.zeros(dim)",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "Tanh",
+        "kind": 6,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "class Tanh:\n    def __call__(self, x):\n        self.out = torch.tanh(x)\n        return self.out\n    def parameters(self):\n        return []\nclass Embedding:\n    def __init__(self, vocab_size, emb_size):\n        self.weight = torch.randn(vocab_size, emb_size)\n    def __call__(self, x):",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "Embedding",
+        "kind": 6,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "class Embedding:\n    def __init__(self, vocab_size, emb_size):\n        self.weight = torch.randn(vocab_size, emb_size)\n    def __call__(self, x):\n        # X: (batch_size, block_size) self.out: (batch_size, block_size, emb_size)\n        self.out = self.weight[x] \n        return self.out\n    def parameters(self):\n        return [self.weight]\nclass Flatten:",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "Flatten",
+        "kind": 6,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "class Flatten:\n    def __init__(self, group_size):\n        self.group_size = group_size\n    def __call__(self, x):\n        batch_size, block_size, emb_size = x.shape\n        self.out = x.view(batch_size, block_size // self.group_size, self.group_size * emb_size)\n        if self.out.shape[1] == 1:\n            self.out = self.out.squeeze(dim=1)\n        return self.out\n    def parameters(self):",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "Sequential",
+        "kind": 6,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "class Sequential:\n    # Layers: A list of layers\n    def __init__(self, layers):\n        self.layers = layers\n    def __call__(self, x):\n        for layer in self.layers:\n            x = layer(x)\n        self.out = x\n        return self.out\n    def parameters(self):",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "build_dataset",
+        "kind": 2,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "def build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'\n        context = [0]*block_size\n        for ch in word:\n            xs.append(context)\n            idx = stoi[ch]\n            ys.append(idx)",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "split_loss",
+        "kind": 2,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "def split_loss(split):\n    X, Y = {\n        'train': (Xtr, Ytr), \n        'val': (Xval, Yval),\n        'test': (Xtest, Ytest)\n    }[split]\n    logits = model(X)\n    loss = F.cross_entropy(logits, Y)\n    print(f\"{split} loss: {loss.item()}\")\nsplit_loss('train')",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "words",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "words = open('names.txt', 'r').read().split()\nprint(\"read_file\")\n# Build a reference map\nchs = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "chs",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "chs = sorted(list(set(''.join(words))))\nstoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "stoi",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "stoi = {s:i+1 for i, s in enumerate(chs)}\nstoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "stoi['.']",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "stoi['.'] = 0\nitos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'\n        context = [0]*block_size",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "itos",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "itos = {i:s for s, i in stoi.items()}\nblock_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'\n        context = [0]*block_size\n        for ch in word:",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "block_size",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "block_size = 8\n# Build the dataset\ndef build_dataset(words):\n    xs = []\n    ys = []\n    for word in words:\n        word += '.'\n        context = [0]*block_size\n        for ch in word:\n            xs.append(context)",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "num1",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "num1 = int(len(words)*0.8)\nnum2 = int(len(words)*0.9)\nXtr, Ytr = build_dataset(words[:num1])\nXval, Yval = build_dataset(words[num1:num2])\nXtest, Ytest = build_dataset(words[num2:])\n# Define Model layers\nclass Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out) / (fan_in ** 0.5)\n        self.bias = torch.zeros(fan_out) if bias else None",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "num2",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "num2 = int(len(words)*0.9)\nXtr, Ytr = build_dataset(words[:num1])\nXval, Yval = build_dataset(words[num1:num2])\nXtest, Ytest = build_dataset(words[num2:])\n# Define Model layers\nclass Linear:\n    def __init__(self, fan_in, fan_out, bias=True):\n        self.weight = torch.randn(fan_in, fan_out) / (fan_in ** 0.5)\n        self.bias = torch.zeros(fan_out) if bias else None\n    def __call__(self, x):",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "batch_size",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "batch_size = 32\nblock_size = 8\nemb_size = 10\nn_hidden = 100\nvocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "block_size",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "block_size = 8\nemb_size = 10\nn_hidden = 100\nvocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "emb_size",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "emb_size = 10\nn_hidden = 100\nvocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "n_hidden",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "n_hidden = 100\nvocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)\n    Flatten(2),  # (32, 200)",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "vocab_size",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "vocab_size = len(itos)\ngroup_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)\n    Flatten(2),  # (32, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 100)",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "group_size",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "group_size = 2\nmodel = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)\n    Flatten(2),  # (32, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 100)\n    Linear(n_hidden, vocab_size), BatchNorm1D(vocab_size)   # (32, 27)",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "model",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "model = Sequential([\n    Embedding(vocab_size, emb_size), # (32, 8, 10)\n    Flatten(2),  # (32, 4, 20)\n    Linear(group_size * emb_size, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 4, 100)\n    Flatten(2),  # (32, 2, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 2, 100)\n    Flatten(2),  # (32, 200)\n    Linear(group_size * n_hidden, n_hidden, bias=False), BatchNorm1D(n_hidden), Tanh(),  # (32, 100)\n    Linear(n_hidden, vocab_size), BatchNorm1D(vocab_size)   # (32, 27)\n])",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "parameters",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "parameters = model.parameters()\n# Set the gradient for all params to be true\nfor p in parameters:\n    p.requires_grad = True\n# Training\nepoch_num = 200000\nlossi = []\nfor i in range(epoch_num):\n    # Select a mini batch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size, ))",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "epoch_num",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
+        "peekOfCode": "epoch_num = 200000\nlossi = []\nfor i in range(epoch_num):\n    # Select a mini batch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size, ))\n    Xb, Yb = Xtr[idx], Ytr[idx]\n    # Forward pass\n    logits = model(Xb)\n    loss = F.cross_entropy(logits, Yb)\n    lossi.append(loss.log10().item())",
+        "detail": "part5(wavenet)",
+        "documentation": {}
+    },
+    {
+        "label": "lossi",
+        "kind": 5,
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
         "peekOfCode": "lossi = []\nfor i in range(epoch_num):\n    # Select a mini batch\n    idx = torch.randint(0, Xtr.shape[0], (batch_size, ))\n    Xb, Yb = Xtr[idx], Ytr[idx]\n    # Forward pass\n    logits = model(Xb)\n    loss = F.cross_entropy(logits, Yb)\n    lossi.append(loss.log10().item())\n    # Backward",
-        "detail": "part5(Wavenet)",
+        "detail": "part5(wavenet)",
         "documentation": {}
     },
     {
         "label": "word_num",
         "kind": 5,
-        "importPath": "part5(Wavenet)",
-        "description": "part5(Wavenet)",
+        "importPath": "part5(wavenet)",
+        "description": "part5(wavenet)",
         "peekOfCode": "word_num = 20\nfor i in range(word_num):\n    out = []\n    context = [0]*block_size\n    while True:\n        x = torch.tensor(context).view(1, -1)  # (1, block_size)\n        logits = model(x) # (1, vocab_size)\n        prob = F.softmax(logits, dim=1).view(vocab_size)\n        idx = torch.multinomial(prob, num_samples=1).item()\n        out.append(itos[idx])",
-        "detail": "part5(Wavenet)",
+        "detail": "part5(wavenet)",
         "documentation": {}
     }
 ]
